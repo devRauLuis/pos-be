@@ -1,6 +1,9 @@
 {
   "name": "pos-be",
   "version": "0.0.1",
+  "engines": {
+    "node": "18.9.0"
+  },
   "description": "",
   "author": "",
   "private": true,
