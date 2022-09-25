@@ -1,7 +1,7 @@
 export interface IClient {
   address: string,
   cardCode: number,
-  createAt: string,
+  createAt: Date,
   active: boolean,
   email: string,
   phone: string,
