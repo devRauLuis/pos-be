@@ -22,6 +22,8 @@ model Client {
     updatedAt DateTime @updatedAt
     active Boolean @default(true)
     role String
+    order Order[]
+
 }
 
 model User {
@@ -36,6 +38,7 @@ model User {
      updatedAt DateTime @updatedAt
      active Boolean @default(true)
      role String
+     order Order[]
  }
 
  model Product {
@@ -44,33 +47,37 @@ model User {
      price Int
      category String
      img String
-     createdAt Date? @default(now())
-     updatedAt Date? @updatedAt
+     createdAt DateTime? @default(now())
+     updatedAt DateTime? @updatedAt
      createdBy String?
      deleted Boolean
      objectID String?
      code String?
      count Int?
- }
-
- model Order {
-     id String @id @map("_id") @db.ObjectId
- 	 products Product[]
- 	 user User @relation(fields: [userId], references: [id])
- 	 userId String @db.ObjectId
- 	 client Client @relation(fields: [clientID], references: [id])
- 	 clientId String @db.ObjectId
- 	 taxes Int
- 	 subTotal Int
- 	 total Int
- 	 createdAt Data
- 	 payment String
- 	 cardInfo CardInfo? @relation(fields: [cardInfoId], references: [id])
- 	 cardInfoId String @db.ObjectId
- 	 status String
+     order Order @relation(fields: [orderId], references: [id])
+     orderId String @db.ObjectId 
  }
 
  model CardInfo {
+     id String @id @map("_id") @db.ObjectId
      last4Digits String
      nameOnCard String
+     order Order[]
  }
+ model Order {
+    id String @id @map("_id") @db.ObjectId
+    products Product[]
+    user User @relation(fields: [userId], references: [id])
+    userId String @db.ObjectId
+    client Client @relation(fields: [clientId], references: [id])
+    clientId String @db.ObjectId
+    taxes Int
+    subTotal Int
+    total Int
+    createdAt DateTime
+    payment String
+    cardInfo CardInfo? @relation(fields: [cardInfoId], references: [id])
+    cardInfoId String @db.ObjectId
+    status String
+ }
+
