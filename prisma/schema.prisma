@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
+  hash      String
+  roles     String[]
+  orders    Order[]
+}
+
+model Client {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  address   String   @map("address")
+  cardCode  String
+  createdAt DateTime @default(now())
+  email     String   @unique
+  inactive  Boolean  @default(false)
+  firstName String
+  lastName  String
+  phone     String   @unique
+  points    Int
+  updatedAt DateTime @updatedAt
+  visits    Int
+  Order     Order[]
+}
+
+model Product {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  name      String
+  price     Float
+  deleted   Boolean  @default(false)
+  img       String
+  updatedAt DateTime @updatedAt
+  Order     Order?   @relation(fields: [orderId], references: [id])
+  orderId   String?  @db.ObjectId
+}
+
+model Order {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime  @default(now())
+  payment   String
+  products  Product[]
+  status    String
+  subTotal  Float
+  taxes     Float
+  total     Float
+  client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?   @db.ObjectId
+  updatedAt DateTime  @updatedAt
+  seller    User?     @relation(fields: [sellerId], references: [id])
+  sellerId  String?   @db.ObjectId
+}
