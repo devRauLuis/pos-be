@@ -13,6 +13,7 @@ import { RolesGuard } from 'src/auth/guard/roles.guard';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @Post()
