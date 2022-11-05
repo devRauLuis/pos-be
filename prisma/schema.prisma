@@ -40,7 +40,7 @@ model Product {
   name      String
   price     Float
   deleted   Boolean  @default(false)
-  img       String
+  img       String?
   updatedAt DateTime @updatedAt
   Order     Order?   @relation(fields: [orderId], references: [id])
   orderId   String?  @db.ObjectId
