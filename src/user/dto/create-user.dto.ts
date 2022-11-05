@@ -1,6 +1,6 @@
-import { Role } from '@prisma/client';
+import { Role } from 'src/auth/role.enum';
 
-export class CreateUserDto {
+export interface CreateUserDto {
   email: string;
   password: string;
   name: string;

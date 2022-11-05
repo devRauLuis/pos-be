@@ -1,8 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { Role } from '@prisma/client';
-import { CreateUserDto } from './create-user.dto';
+import { Role } from 'src/auth/role.enum';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export interface UpdateUserDto {
   email: string;
   password: string;
   name: string;
