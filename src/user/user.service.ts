@@ -7,24 +7,25 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaUser: PrismaService['user']) {}
+  constructor(private readonly prisma: PrismaService) {}
+
   async create(createUserDto: CreateUserDto) {
     const [password, hash] = await encodePassword(createUserDto.password);
-    return await this.prismaUser.create({
+    return await this.prisma.user.create({
       data: { ...createUserDto, password, hash },
     });
   }
   findAll(params: GetUserParamsDto) {
-    return this.prismaUser.findMany({ where: params });
+    return this.prisma.user.findMany({ where: params });
   }
   findOne(params: GetUserParamsDto) {
-    return this.prismaUser.findUniqueOrThrow({ where: params });
+    return this.prisma.user.findUniqueOrThrow({ where: params });
   }
   update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaUser.update({ where: { id }, data: { ...updateUserDto } });
+    return this.prisma.user.update({ where: { id }, data: { ...updateUserDto } });
   }
   async remove(id: string) {
     const user = await this.findOne({ id });
-    return this.prismaUser.update({ where: user, data: { ...user, inactive: true } });
+    return this.prisma.user.update({ where: user, data: { ...user, inactive: true } });
   }
 }
