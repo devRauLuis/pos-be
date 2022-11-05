@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { encodePassword } from 'src/utils/bcrypt';
+import { encodePassword } from 'src/utils/argon';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,21 +11,32 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto): Promise<User> {
-    console.log(createUserDto);
-    const [password, hash] = await encodePassword(createUserDto.password);
-    const saved = await this.prisma.user.create({
-      data: { ...createUserDto, password, hash },
-    });
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const hash = await encodePassword(createUserDto.password);
+      delete createUserDto.password;
+      const saved = await this.prisma.user.create({
+        data: { ...createUserDto, hash },
+      });
 
-    return saved;
+      return saved;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new BadRequestException('Credentials taken');
+        }
+      }
+    }
   }
+
   findAll(params: GetUserParamsDto) {
     return this.prisma.user.findMany({ where: params });
   }
+
   findOne(params: GetUserParamsDto) {
     return this.prisma.user.findUniqueOrThrow({ where: params });
   }
+
   update(id: string, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({ where: { id }, data: { ...updateUserDto } });
   }
