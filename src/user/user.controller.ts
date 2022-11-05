@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
+import { User } from '@prisma/client';
 
 @Controller('users')
 export class UserController {
@@ -14,7 +15,7 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query() params: GetUserParamsDto) {
+  findAll(@Query() params: GetUserParamsDto): Promise<User[]> {
     return this.userService.findAll(params);
   }
 
@@ -25,11 +26,11 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }

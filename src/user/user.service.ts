@@ -16,19 +16,20 @@ export class UserService {
     });
   }
 
-  async findAll(params: GetUserParamsDto) {
-    return await this.prismaUser.findMany({ where: params });
+  findAll(params: GetUserParamsDto) {
+    return this.prismaUser.findMany({ where: params });
   }
 
-  async findOne(params: GetUserParamsDto) {
-    return await this.prismaUser.findUniqueOrThrow({ where: params });
+  findOne(params: GetUserParamsDto) {
+    return this.prismaUser.findUniqueOrThrow({ where: params });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.prismaUser.update({ where: { id }, data: { ...updateUserDto } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne({ id });
+    return this.prismaUser.update({ where: user, data: { ...user, inactive: true } });
   }
 }

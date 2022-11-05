@@ -12,6 +12,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
+  inactive  Boolean  @default(false)
   password  String
   name      String?
   hash      String
