@@ -13,7 +13,6 @@ model User {
   updatedAt DateTime @updatedAt
   email     String   @unique
   inactive  Boolean  @default(false)
-  password  String
   name      String?
   hash      String
   roles     Role[]
@@ -22,17 +21,18 @@ model User {
 
 model Client {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  address   String   @map("address")
-  cardCode  String
+  address   String?  @map("address")
+  cardCode  String?
   createdAt DateTime @default(now())
-  email     String   @unique
+  email     String?  @unique
   inactive  Boolean  @default(false)
   firstName String
   lastName  String
-  phone     String   @unique
-  points    Int
+  phone     String?  @unique
+  idCard    String   @unique
+  points    Int?
   updatedAt DateTime @updatedAt
-  visits    Int
+  visits    Int?
   order     Order[]
 }
 
