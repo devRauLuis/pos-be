@@ -16,7 +16,7 @@ model User {
   password  String
   name      String?
   hash      String
-  roles     String[]
+  roles     Role[]
   orders    Order[]
 }
 
@@ -62,4 +62,9 @@ model Order {
   updatedAt DateTime  @updatedAt
   seller    User?     @relation(fields: [sellerId], references: [id])
   sellerId  String?   @db.ObjectId
+}
+
+enum Role {
+  USER
+  ADMIN
 }
