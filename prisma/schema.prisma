@@ -12,6 +12,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
+  password  String
   name      String?
   hash      String
   roles     String[]
@@ -31,7 +32,7 @@ model Client {
   points    Int
   updatedAt DateTime @updatedAt
   visits    Int
-  Order     Order[]
+  order     Order[]
 }
 
 model Product {
@@ -42,7 +43,7 @@ model Product {
   deleted   Boolean  @default(false)
   img       String?
   updatedAt DateTime @updatedAt
-  Order     Order?   @relation(fields: [orderId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id])
   orderId   String?  @db.ObjectId
 }
 
