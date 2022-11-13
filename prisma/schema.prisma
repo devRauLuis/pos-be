@@ -12,26 +12,28 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
+  inactive  Boolean  @default(false)
   name      String?
   hash      String
-  roles     String[]
+  roles     Role[]
   orders    Order[]
 }
 
 model Client {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  address   String   @map("address")
-  cardCode  String
+  address   String?  @map("address")
+  cardCode  String?
   createdAt DateTime @default(now())
-  email     String   @unique
+  email     String?  @unique
   inactive  Boolean  @default(false)
   firstName String
   lastName  String
-  phone     String   @unique
-  points    Int
+  phone     String?  @unique
+  idCard    String   @unique
+  points    Int?
   updatedAt DateTime @updatedAt
-  visits    Int
-  Order     Order[]
+  visits    Int?
+  order     Order[]
 }
 
 model Product {
@@ -42,7 +44,7 @@ model Product {
   deleted   Boolean  @default(false)
   img       String?
   updatedAt DateTime @updatedAt
-  Order     Order?   @relation(fields: [orderId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id])
   orderId   String?  @db.ObjectId
 }
 
@@ -60,4 +62,9 @@ model Order {
   updatedAt DateTime  @updatedAt
   seller    User?     @relation(fields: [sellerId], references: [id])
   sellerId  String?   @db.ObjectId
+}
+
+enum Role {
+  USER
+  ADMIN
 }
