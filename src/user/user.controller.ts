@@ -8,9 +8,11 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
+@ApiTags('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
